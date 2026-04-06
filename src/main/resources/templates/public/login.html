@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>简易用户登录界面 | 清新简约</title>
+    <!-- 使用 Thymeleaf 的 @{} 语法引用静态资源 -->
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+</head>
+<body>
+<div class="login-card">
+    <div class="login-header">
+        <h1>欢迎回来</h1>
+        <p>请登录您的账户</p>
+    </div>
+
+    <!-- 登录表单 -->
+    <form id="loginForm" th:action="@{/login}" method="post">
+        <div class="input-group">
+            <label for="username">用户名 / 邮箱</label>
+            <input type="text" name="username" id="username" class="input-field" placeholder="请输入用户名或邮箱" autocomplete="username">
+        </div>
+
+        <div class="input-group">
+            <label for="password">密码</label>
+            <input type="password" name="password" id="password" class="input-field" placeholder="请输入密码" autocomplete="current-password">
+        </div>
+
+        <div class="login-options">
+            <label class="remember-check">
+                <input type="checkbox" id="rememberMe"> 记住我
+            </label>
+            <a href="#" class="forgot-link" id="forgotPwdLink">忘记密码？</a>
+        </div>
+
+        <button type="submit" class="login-btn">登 录</button>
+    </form>
+
+    <!-- 动态提示区域 -->
+    <div class="message-area" id="messageArea">
+        <div class="info-message">✨ 演示账号: demo / 任意密码 (非空即可)</div>
+    </div>
+
+    <div class="demo-hint">
+        💡 简易演示 | 账号密码均不能为空即可成功登录 | 勾选"记住我"会保存用户名 | 点击"忘记密码"模拟找回功能
+    </div>
+</div>
+</body>
+</html>

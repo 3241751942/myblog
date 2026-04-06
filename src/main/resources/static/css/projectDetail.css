@@ -1,0 +1,223 @@
+/* 全局样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background-color: #f7fafc;
+    color: #2d3748;
+    line-height: 1.6;
+}
+
+/* 导航栏 */
+.navbar {
+    background: #ffffff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo a {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #2d3748;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+}
+.nav-links a {
+    text-decoration: none;
+    color: #4a5568;
+    font-weight: 500;
+    font-size: 1.1rem;
+    transition: color 0.2s;
+}
+.nav-links a:hover {
+    color: #4299e1;
+}
+
+/* 项目标题 */
+.project-title {
+    max-width: 1200px;
+    margin: 2rem auto 0;
+    padding: 0 2rem;
+}
+.project-title h1 {
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+/* 布局容器 */
+.layout {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 2rem;
+}
+
+/* 左侧导航 */
+.project-nav {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    height: fit-content;
+    position: sticky;
+    top: 100px;
+}
+.project-nav h3 {
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+    color: #2d3748;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.nav-item {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 1.1rem;
+    color: #4a5568;
+}
+.nav-item:hover {
+    background: #f7fafc;
+}
+.nav-item.active {
+    background: #ebf8ff;
+    color: #3182ce;
+    font-weight: 500;
+}
+.nav-item i {
+    font-size: 1.2rem;
+    width: 20px;
+}
+
+/* 右侧内容区 */
+.content {
+    min-height: 500px;
+}
+
+/* 内容模块：默认隐藏，只有active时显示 */
+.content-section {
+    display: none;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.content-section.active {
+    display: block;
+}
+.content-section h2 {
+    font-size: 1.6rem;
+    margin-bottom: 1.5rem;
+    color: #2d3748;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 0.5rem;
+}
+.content-box {
+    font-size: 1.1rem;
+    color: #4a5568;
+    line-height: 1.8;
+}
+
+/* 设计思路样式 */
+.design-item {
+    margin-bottom: 1.8rem;
+    padding-bottom: 1.8rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+.design-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+.design-item h4 {
+    font-size: 1.2rem;
+    color: #2d3748;
+    margin-bottom: 0.8rem;
+    font-weight: 600;
+}
+.design-item p {
+    margin: 0;
+}
+
+/* 技术栈标签 */
+.tech-tag {
+    display: inline-block;
+    background: #edf2f7;
+    color: #2d3748;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    margin-right: 0.8rem;
+    margin-bottom: 0.8rem;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+}
+.tech-tag:hover {
+    background: #e2e8f0;
+}
+
+/* 加载/空/错误提示 */
+.loading-tip {
+    text-align: center;
+    padding: 3rem;
+    color: #4299e1;
+    font-size: 1.1rem;
+}
+.empty-tip {
+    color: #718096;
+    font-style: italic;
+    padding: 1rem 0;
+}
+.error-tip {
+    color: #e53e3e;
+    padding: 1rem 0;
+}
+.error-box {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #e53e3e;
+    background: #fff5f5;
+    border-radius: 12px;
+}
+.error-box i {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+/* 响应式适配 */
+@media (max-width: 768px) {
+    .layout {
+        grid-template-columns: 1fr;
+    }
+    .project-nav {
+        position: static;
+    }
+}

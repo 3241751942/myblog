@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>实战案例 | 林间博客</title>
+    <!-- 使用现代、干净的字体系统 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" th:href="@{/css/practical.css}">
+</head>
+<body>
+
+<!-- 导航栏 -->
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="logo">
+            <a href="index.html"><i class="fas fa-code"></i> 林间博客</a>
+        </div>
+        <button class="menu-toggle" id="mobileMenuBtn" aria-label="菜单">
+            <i class="fas fa-bars"></i>
+        </button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html" data-nav="home">首页</a></li>
+            <li><a href="tech-articles.html" data-nav="tech">技术文章</a></li>
+            <li><a href="dev-categories.html" data-nav="dev">开发分类</a></li>
+            <li><a href="practial.html" class="active" data-nav="case">实战案例</a></li>
+            <li><a href="about.html" data-nav="about">关于我</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- 页面头部 -->
+<section class="page-header">
+    <div class="container">
+        <h1><i class="fas fa-rocket"></i> 实战案例</h1>
+        <p>从0到1构建真实项目 · 分享完整开发经验与技术方案</p>
+    </div>
+</section>
+
+<div class="container">
+    <!-- 筛选栏 -->
+    <div class="filter-bar">
+        <div class="filter-tags" id="filterTags">
+            <button class="filter-chip active" data-category="all">全部项目</button>
+            <button class="filter-chip" data-category="frontend">前端项目</button>
+            <button class="filter-chip" data-category="fullstack">全栈项目</button>
+            <button class="filter-chip" data-category="tools">工具/库</button>
+            <button class="filter-chip" data-category="mobile">移动端</button>
+        </div>
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="搜索项目名称或技术...">
+        </div>
+    </div>
+
+    <!-- 项目卡片列表 -->
+    <div id="projectsContainer" class="projects-grid">
+        <!-- 动态JS渲染 -->
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <p>© 2025 林间博客 | 保持好奇，持续输出 | 实战项目持续更新中</p>
+    </div>
+</footer>
+<script th:src="@{/js/practical.js}"></script>
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>项目详情 | 林间博客</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2d3748;
+            --accent: #4299e1;
+            --light: #f7fafc;
+            --mild: #edf2f7;
+            --gray: #cbd5e0;
+            --text: #1a202c;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 99;
+        }
+        .nav-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+        .logo a {
+            color: var(--primary);
+            font-size: 1.4rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        .nav-links a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .project-title {
+            max-width: 1300px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        .project-title h1 {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .layout {
+            max-width: 1300px;
+            margin: 0 auto 4rem;
+            padding: 0 2rem;
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .project-nav {
+            width: 180px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1rem;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+        .project-nav h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+        }
+        .nav-item {
+            padding: 0.6rem 0.8rem;
+            margin: 4px 0;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.25s;
+            color: #4a5568;
+            font-size: 0.9rem;
+        }
+        .nav-item i {
+            color: var(--accent);
+            width: 14px;
+            font-size: 0.9rem;
+        }
+        .nav-item.active {
+            background: #ebf8ff;
+            color: var(--accent);
+            font-weight: 500;
+        }
+        .nav-item:hover {
+            background: #f7fafc;
+        }
+
+        .content {
+            flex: 1;
+        }
+        .section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2.2rem;
+            margin-bottom: 1rem;
+            display: none;
+            animation: fade 0.4s;
+        }
+        .section.active {
+            display: block;
+        }
+        @keyframes fade {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .section h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section p {
+            line-height: 1.7;
+            margin-bottom: 0.8rem;
+            color: #2d3748;
+        }
+
+        .tech-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 0.8rem;
+        }
+        .tech {
+            background: #f7fafc;
+            border: 1px solid var(--border-color);
+            color: #4a5568;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+        }
+
+        .demo-box {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+        .demo-bar {
+            background: #f7fafc;
+            padding: 8px 12px;
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        .demo-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .demo-iframe {
+            width: 100%;
+            height: 380px;
+            border: none;
+            background: #fff;
+        }
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            background: var(--accent);
+            color: #fff;
+            border-radius: 6px;
+            text-decoration: none;
+            margin-top: 0.8rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="logo">
+            <a href="/index.html"><i class="fas fa-code"></i> 林间博客</a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/index.html">首页</a></li>
+            <li><a href="/tech-articles.html">技术文章</a></li>
+            <li><a href="/dev-categories.html">开发分类</a></li>
+            <li><a href="/public/practical.html">实战案例</a></li>
+            <li><a href="/about.html">关于我</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="project-title">
+    <h1 id="mainTitle">加载中...</h1>
+</div>
+
+<div class="layout">
+    <div class="project-nav">
+        <h3><i class="fas fa-bars"></i> 项目导航</h3>
+        <div class="nav-item active" data-target="intro">
+            <i class="fas fa-info-circle"></i> 项目介绍
+        </div>
+        <div class="nav-item" data-target="design">
+            <i class="fas fa-sitemap"></i> 设计思路
+        </div>
+        <div class="nav-item" data-target="tech">
+            <i class="fas fa-code"></i> 技术栈
+        </div>
+        <div class="nav-item" data-target="demo">
+            <i class="fas fa-desktop"></i> 在线演示
+        </div>
+    </div>
+
+    <div class="content" id="detailContainer">
+        <div class="loading" style="text-align:center; padding:3rem;">
+            <i class="fas fa-spinner fa-spin" style="color:#4299e1; font-size:1.8rem;"></i>
+            <p>加载中...</p>
+        </div>
+    </div>
+</div>
+
+<script src="/js/projectDetail.js"></script>
+</body>
+</html>

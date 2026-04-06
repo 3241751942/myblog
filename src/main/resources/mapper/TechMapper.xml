@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zzl.myblog.mapper.TechMapper">
+
+    <!-- 基础结果映射 -->
+    <resultMap id="BaseResultMap" type="com.zzl.myblog.entity.Tech">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="category" property="category"/>
+        <result column="icon" property="icon"/>
+        <result column="created_at" property="createdAt"/>
+    </resultMap>
+
+    <!-- 插入技术标签 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.zzl.myblog.entity.Tech">
+        INSERT INTO tech (name, category, icon)
+        VALUES (#{name}, #{category}, #{icon})
+    </insert>
+
+    <!-- 根据名称查询技术（返回 Optional，MyBatis 会自动处理） -->
+    <select id="findByName" resultMap="BaseResultMap">
+        SELECT * FROM tech WHERE name = #{name}
+    </select>
+
+    <!-- 根据ID查询技术 -->
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT * FROM tech WHERE id = #{id}
+    </select>
+
+    <!-- 查询所有技术 -->
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT * FROM tech ORDER BY name
+    </select>
+
+    <!-- 按分类查询技术 -->
+    <select id="findByCategory" resultMap="BaseResultMap">
+        SELECT * FROM tech
+        WHERE category = #{category}
+        ORDER BY name
+    </select>
+
+    <!-- 统计技术使用次数 -->
+    <select id="getTechUsageStats" resultType="java.util.HashMap">
+        SELECT
+            t.name,
+            COUNT(pt.project_id) as usage_count
+        FROM tech t
+                 LEFT JOIN project_tech pt ON t.id = pt.tech_id
+        GROUP BY t.id
+        ORDER BY usage_count DESC
+    </select>
+
+    <!-- 获取热门技术（使用次数最多的前N个） -->
+    <select id="findHotTechs" resultMap="BaseResultMap">
+        SELECT t.*
+        FROM tech t
+                 INNER JOIN project_tech pt ON t.id = pt.tech_id
+        GROUP BY t.id
+        ORDER BY COUNT(pt.project_id) DESC
+        LIMIT #{limit}
+    </select>
+
+</mapper>

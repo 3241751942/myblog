@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zzl.myblog.mapper.ProjectMapper">
+
+    <!-- ==================== 结果映射 ==================== -->
+
+    <!-- 基础结果映射：Project 基本字段 -->
+    <resultMap id="ProjectResultMap" type="com.zzl.myblog.entity.Project">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="description" property="description"/>
+        <result column="category" property="category"/>
+        <result column="image_url" property="imageUrl"/>
+        <result column="demo_url" property="demoUrl"/>
+        <result column="github_url" property="githubUrl"/>
+        <result column="date" property="date"/>
+        <result column="created_at" property="createdAt"/>
+    </resultMap>
+
+    <!-- 复杂结果映射：Project 带技术标签列表 -->
+    <resultMap id="ProjectWithTechsMap" type="com.zzl.myblog.entity.Project" extends="ProjectResultMap">
+        <collection property="techs" ofType="com.zzl.myblog.entity.Tech">
+            <id column="tech_id" property="id"/>
+            <result column="tech_name" property="name"/>
+            <result column="tech_category" property="category"/>
+            <result column="tech_icon" property="icon"/>
+            <result column="tech_created_at" property="createdAt"/>
+        </collection>
+    </resultMap>
+
+    <!-- ==================== 插入语句 ==================== -->
+
+    <!-- 插入项目（返回自动生成的ID） -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.zzl.myblog.entity.Project">
+        INSERT INTO project (title, description, category, image_url, demo_url, github_url, date)
+        VALUES (#{title}, #{description}, #{category}, #{imageUrl}, #{demoUrl}, #{githubUrl}, #{date})
+    </insert>
+
+    <!-- ==================== 查询语句 ==================== -->
+
+    <!-- 根据ID查询项目 -->
+    <select id="findById" resultMap="ProjectResultMap">
+        SELECT * FROM project WHERE id = #{id}
+    </select>
+
+    <!-- 查询所有项目（简单版，不带技术标签） -->
+    <select id="findAll" resultMap="ProjectResultMap">
+        SELECT * FROM project ORDER BY date DESC
+    </select>
+
+    <!-- 根据分类查询项目 -->
+    <select id="findByCategory" resultMap="ProjectResultMap">
+        SELECT * FROM project
+        WHERE category = #{category}
+        ORDER BY date DESC
+    </select>
+
+    <!-- 根据标题模糊查询项目 -->
+    <select id="findByName" resultMap="ProjectResultMap">
+        SELECT * FROM project
+        WHERE title LIKE CONCAT('%', #{title}, '%')
+        ORDER BY date DESC
+    </select>
+
+    <!-- 关键字搜索项目（标题或描述） -->
+    <select id="search" resultMap="ProjectResultMap">
+        SELECT * FROM project
+        WHERE title LIKE CONCAT('%', #{keyword}, '%')
+           OR description LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY date DESC
+    </select>
+
+    <!-- 查询所有项目及其技术标签（用于前端展示） -->
+    <select id="findAllWithTechs" resultMap="ProjectWithTechsMap">
+        SELECT
+            p.id,
+            p.title,
+            p.description,
+            p.category,
+            p.image_url,
+            p.demo_url,
+            p.github_url,
+            p.date,
+            p.created_at,
+            t.id as tech_id,
+            t.name as tech_name,
+            t.category as tech_category,
+            t.icon as tech_icon,
+            t.created_at as tech_created_at,
+            pt.sort_order
+        FROM project p
+                 LEFT JOIN project_tech pt ON p.id = pt.project_id
+                 LEFT JOIN tech t ON pt.tech_id = t.id
+        ORDER BY p.date DESC, pt.sort_order ASC
+    </select>
+
+    <!-- 根据技术名称查询包含该技术的所有项目 -->
+    <select id="findByTechName" resultMap="ProjectWithTechsMap">
+        SELECT
+            p.id,
+            p.title,
+            p.description,
+            p.category,
+            p.image_url,
+            p.demo_url,
+            p.github_url,
+            p.date,
+            p.created_at,
+            t.id as tech_id,
+            t.name as tech_name,
+            t.category as tech_category,
+            t.icon as tech_icon,
+            t.created_at as tech_created_at,
+            pt.sort_order
+        FROM project p
+                 INNER JOIN project_tech pt ON p.id = pt.project_id
+                 INNER JOIN tech t ON pt.tech_id = t.id
+        WHERE t.name = #{techName}
+        ORDER BY p.date DESC, pt.sort_order ASC
+    </select>
+
+    <!-- 高级搜索：支持多条件组合查询 -->
+    <select id="advancedSearch" resultMap="ProjectWithTechsMap">
+        SELECT
+        p.id,
+        p.title,
+        p.description,
+        p.category,
+        p.image_url,
+        p.demo_url,
+        p.github_url,
+        p.date,
+        p.created_at,
+        t.id as tech_id,
+        t.name as tech_name,
+        t.category as tech_category,
+        t.icon as tech_icon,
+        t.created_at as tech_created_at,
+        pt.sort_order
+        FROM project p
+        LEFT JOIN project_tech pt ON p.id = pt.project_id
+        LEFT JOIN tech t ON pt.tech_id = t.id
+        <where>
+            <if test="title != null and title != ''">
+                AND p.title LIKE CONCAT('%', #{title}, '%')
+            </if>
+            <if test="category != null and category != ''">
+                AND p.category = #{category}
+            </if>
+            <if test="startDate != null">
+                AND p.date >= #{startDate}
+            </if>
+            <if test="endDate != null">
+                AND p.date &lt;= #{endDate}
+            </if>
+            <if test="techName != null and techName != ''">
+                AND t.name = #{techName}
+            </if>
+        </where>
+        ORDER BY p.date DESC, pt.sort_order ASC
+    </select>
+
+    <!-- ==================== 更新语句 ==================== -->
+
+    <!-- 更新项目 -->
+    <update id="update" parameterType="com.zzl.myblog.entity.Project">
+        UPDATE project
+        SET title = #{title},
+            description = #{description},
+            category = #{category},
+            image_url = #{imageUrl},
+            demo_url = #{demoUrl},
+            github_url = #{githubUrl},
+            date = #{date}
+        WHERE id = #{id}
+    </update>
+
+    <!-- ==================== 删除语句 ==================== -->
+
+    <!-- 根据ID删除项目 -->
+    <delete id="deleteById">
+        DELETE FROM project WHERE id = #{id}
+    </delete>
+
+</mapper>

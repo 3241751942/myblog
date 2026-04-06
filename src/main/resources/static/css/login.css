@@ -1,0 +1,202 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.login-card {
+    background: rgba(255, 255, 255, 0.96);
+    border-radius: 32px;
+    box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 420px;
+    padding: 2rem 1.8rem 2.2rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.login-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 30px 50px -15px rgba(0, 0, 0, 0.35);
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.login-header h1 {
+    font-size: 1.9rem;
+    font-weight: 600;
+    background: linear-gradient(120deg, #4a6bff, #8b5cf6);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    letter-spacing: -0.3px;
+}
+
+.login-header p {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-top: 8px;
+    font-weight: 400;
+}
+
+.input-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.input-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #2d3e50;
+    margin-bottom: 6px;
+    letter-spacing: 0.3px;
+}
+
+.input-field {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 1rem;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 24px;
+    outline: none;
+    background-color: #ffffff;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    color: #1e293b;
+}
+
+.input-field:focus {
+    border-color: #8b5cf6;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+}
+
+.login-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.8rem;
+    font-size: 0.85rem;
+}
+
+.remember-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    color: #475569;
+    user-select: none;
+}
+
+.remember-check input {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: #8b5cf6;
+}
+
+.forgot-link {
+    color: #8b5cf6;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.forgot-link:hover {
+    color: #6d28d9;
+    text-decoration: underline;
+}
+
+.login-btn {
+    width: 100%;
+    background: linear-gradient(100deg, #667eea, #8b5cf6);
+    border: none;
+    padding: 12px 0;
+    border-radius: 40px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 8px 16px -8px rgba(107, 70, 193, 0.4);
+    letter-spacing: 0.5px;
+}
+
+.login-btn:hover {
+    background: linear-gradient(100deg, #5a67d8, #7c3aed);
+    transform: scale(1.01);
+    box-shadow: 0 12px 22px -10px rgba(107, 70, 193, 0.5);
+}
+
+.login-btn:active {
+    transform: scale(0.98);
+}
+
+.message-area {
+    margin-top: 1.2rem;
+    text-align: center;
+    font-size: 0.85rem;
+    min-height: 48px;
+    padding: 6px 0;
+}
+
+.info-message {
+    color: #059669;
+    background: #ecfdf5;
+    border-radius: 40px;
+    padding: 8px 12px;
+    display: inline-block;
+    width: auto;
+}
+
+.error-message {
+    color: #dc2626;
+    background: #fef2f2;
+    border-radius: 40px;
+    padding: 8px 12px;
+    display: inline-block;
+    width: auto;
+}
+
+.success-message {
+    color: #059669;
+    background: #d1fae5;
+    border-radius: 40px;
+    padding: 8px 12px;
+    display: inline-block;
+    width: auto;
+}
+
+.demo-hint {
+    margin-top: 1.5rem;
+    border-top: 1px solid #edf2f7;
+    padding-top: 1rem;
+    text-align: center;
+    font-size: 0.75rem;
+    color: #94a3b8;
+}
+
+@media (max-width: 480px) {
+    .login-card {
+        padding: 1.5rem;
+    }
+    .login-header h1 {
+        font-size: 1.7rem;
+    }
+    .input-field {
+        padding: 10px 14px;
+    }
+}

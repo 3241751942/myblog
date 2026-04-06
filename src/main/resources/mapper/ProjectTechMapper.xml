@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zzl.myblog.mapper.ProjectTechMapper">
+
+    <!-- 插入单条项目-技术关联 -->
+    <insert id="insert">
+        INSERT INTO project_tech (project_id, tech_id, sort_order)
+        VALUES (#{param1}, #{param2}, #{param3})
+    </insert>
+
+    <!-- 批量插入项目-技术关联 -->
+    <insert id="batchInsert">
+        INSERT INTO project_tech (project_id, tech_id, sort_order) VALUES
+        <foreach collection="relations" item="item" separator=",">
+            (#{projectId}, #{item.techId}, #{item.sortOrder})
+        </foreach>
+    </insert>
+
+    <!-- 删除项目的所有技术关联 -->
+    <delete id="deleteByProjectId">
+        DELETE FROM project_tech WHERE project_id = #{projectId}
+    </delete>
+
+    <!-- 删除某个技术的所有关联 -->
+    <delete id="deleteByTechId">
+        DELETE FROM project_tech WHERE tech_id = #{techId}
+    </delete>
+
+    <!-- 获取项目的技术ID列表（按 sort_order 排序） -->
+    <select id="findTechIdsByProjectId" resultType="java.lang.Long">
+        SELECT tech_id
+        FROM project_tech
+        WHERE project_id = #{projectId}
+        ORDER BY sort_order ASC
+    </select>
+
+    <!-- 获取最大排序值 -->
+    <select id="getMaxSortOrderByProjectId" resultType="java.lang.Integer">
+        SELECT MAX(sort_order)
+        FROM project_tech
+        WHERE project_id = #{projectId}
+    </select>
+
+    <!--看该项目与该技术的关联是否已经存在-->
+    <select id="existsRelation" resultType="boolean">
+        SELECT EXISTS(
+            SELECT 1
+            FROM project_tech
+            WHERE project_id = #{projectId}
+              AND tech_id = #{techId}
+        )
+    </select>
+
+
+    <!--批量删除该项目的标签 -->
+    <delete id="batchDelete">
+        DELETE FROM project_tech
+        WHERE project_id = #{projectId}
+        AND tech_id IN
+        <foreach collection="techIds" item="techId" open="(" close=")" separator=",">
+            #{techId}
+        </foreach>
+    </delete>
+
+
+</mapper>
