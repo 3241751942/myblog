@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>关于我 | 个人主页</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" th:href='@{/css/introduction.css}'>
+</head>
+<body>
+
+<!-- ========= 顶部导航栏 ========= -->
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="logo">
+            <a th:href="@{/public/index}"><i class="fas fa-code"></i> 林间博客</a>
+        </div>
+        <button class="menu-toggle" id="mobileMenuBtn">
+            <i class="fas fa-bars"></i>
+        </button>
+        <ul class="nav-links" id="navLinks">
+            <li><a th:href="@{/public/index}" data-nav="home">首页</a></li>
+            <li><a th:href="@{/public/tech-articles}" data-nav="tech">技术文章</a></li>
+            <li><a th:href="@{/public/dev-categories}" data-nav="dev">开发分类</a></li>
+            <li><a th:href="@{/public/practical}" data-nav="case">实战案例</a></li>
+            <li><a th:href="@{/public/introduction}" class="active" data-nav="about">关于我</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container" style="margin-top: 2rem;">
+    <!-- 头部区域：头像 + 基本信息 -->
+    <div class="hero">
+        <div class="avatar">
+            <div class="avatar-img">
+                <i class="fas fa-user-astronaut"></i>
+            </div>
+        </div>
+        <div class="intro-text">
+            <h1>林一舟 <span style="font-size: 1.2rem; font-weight: 400;">/ Yizhou Lin</span></h1>
+            <div class="tagline">✨ 探索者 · 创造者 · 终身学习者</div>
+            <div class="basic-info">
+                <span><i class="fas fa-map-marker-alt"></i> 中国 · 上海</span>
+                <span><i class="fas fa-briefcase"></i> 全栈开发 / 独立创作者</span>
+                <span><i class="fas fa-calendar-alt"></i> 26岁 · 双子座</span>
+                <span><i class="fas fa-globe"></i> 中 | EN</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 两列布局: 左侧联系方式+爱好，右侧自我介绍+基本信息补充 -->
+    <div class="grid-2col">
+        <!-- 左侧卡片组 -->
+        <div>
+            <!-- 联系方式卡片 -->
+            <div class="card full-width" style="margin-bottom: 1.8rem;">
+                <div class="card-inner">
+                    <div class="section-title">
+                        <i class="fas fa-address-card"></i>
+                        <span>联系方式</span>
+                    </div>
+                    <div class="contact-list">
+                        <div class="contact-item">
+                            <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                            <div class="contact-detail">
+                                yizhou.lin@personal.me <br><small>工作 & 合作邮箱</small>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon"><i class="fab fa-github"></i></div>
+                            <div class="contact-detail">
+                                github.com/yizhou-dev <br><small>开源项目 & 代码笔记</small>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon"><i class="fab fa-twitter"></i></div>
+                            <div class="contact-detail">
+                                @yizhou_art <br><small>技术思考 & 日常分享</small>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon"><i class="fab fa-weixin"></i></div>
+                            <div class="contact-detail">
+                                Yizhou_lin <br><small>微信 (添加请备注“关于我”)</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 爱好与兴趣卡片 -->
+            <div class="card">
+                <div class="card-inner">
+                    <div class="section-title">
+                        <i class="fas fa-heart"></i>
+                        <span>爱好 & 兴趣</span>
+                    </div>
+                    <div class="hobby-wrapper">
+                        <div class="hobby-tag"><i class="fas fa-code"></i> 开源贡献</div>
+                        <div class="hobby-tag"><i class="fas fa-camera"></i> 街拍摄影</div>
+                        <div class="hobby-tag"><i class="fas fa-chess-queen"></i> 国际象棋</div>
+                        <div class="hobby-tag"><i class="fas fa-hiking"></i> 徒步登山</div>
+                        <div class="hobby-tag"><i class="fas fa-book"></i> 科幻阅读</div>
+                        <div class="hobby-tag"><i class="fas fa-music"></i> 电子音乐</div>
+                        <div class="hobby-tag"><i class="fas fa-mug-hot"></i> 手冲咖啡</div>
+                        <div class="hobby-tag"><i class="fas fa-dumbbell"></i> 健身环大冒险</div>
+                    </div>
+                    <div style="margin-top: 1.2rem; font-size: 0.85rem; color: #475569; background: #f1f5f9; padding: 0.6rem 1rem; border-radius: 1rem;">
+                        🌟 最近迷上了独立游戏开发，正在用 Godot 制作一款像素风格的小游戏。
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 右侧: 基本信息补充 + 自我介绍 -->
+        <div>
+            <div class="card full-width" style="margin-bottom: 1.8rem;">
+                <div class="card-inner">
+                    <div class="section-title">
+                        <i class="fas fa-user-circle"></i>
+                        <span>基本信息</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 0.7rem;">
+                        <div><strong><i class="fas fa-graduation-cap" style="width: 1.8rem;"></i> 教育背景：</strong> 复旦大学 软件工程 硕士 (2022届)</div>
+                        <div><strong><i class="fas fa-building"></i> 当前职业：</strong> 某科技公司 前端架构师 / 独立内容创作者</div>
+                        <div><strong><i class="fas fa-map-pin"></i> 常居地：</strong> 上海 · 徐汇</div>
+                        <div><strong><i class="fas fa-seedling"></i> 座右铭：</strong> “Stay curious, keep building.”</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 自我介绍卡片 -->
+            <div class="card">
+                <div class="card-inner">
+                    <div class="section-title">
+                        <i class="fas fa-feather-alt"></i>
+                        <span>自我介绍</span>
+                    </div>
+                    <div class="bio-text">
+                        <p>👋 你好！我是林一舟，一名对技术与设计充满热情的全栈开发者。我相信优雅的代码和友好的用户体验能够改变世界。在过去的几年里，我主导过多个大型后台系统与开源项目，也喜欢撰写技术博客分享思考。</p>
+                        <p style="margin-top: 0.8rem;">🎯 除了敲代码，我热衷于将创意转化为实际产品——从硬件hack到独立app，享受从0到1的创造过程。目前正在探索AI辅助创作和交互式数字艺术。工作中追求极简与效率，生活中是个典型的“杂学家”。期待与志同道合的朋友碰撞灵感！</p>
+                        <p style="margin-top: 0.8rem;">📮 如果你有有趣的项目或者合作想法，欢迎通过上面的方式联系我，一起做一些酷酷的事情。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 成长经历 (时间线全宽卡片) -->
+    <div class="card full-width">
+        <div class="card-inner">
+            <div class="section-title">
+                <i class="fas fa-timeline"></i>
+                <span>成长经历 · 里程碑</span>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">2016 - 2020</div>
+                    <div class="timeline-title">🎓 本科阶段 | 计算机科学与技术</div>
+                    <div class="timeline-desc">浙江大学 竺可桢学院，主修计算机，辅修设计。初次接触Web全栈，加入学校科创团队开发校园助手，获得“挑战杯”省赛金奖。同时开始撰写个人技术博客，累计50+篇原创文章。</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">2020 - 2022</div>
+                    <div class="timeline-title">💻 硕士深造 & 大厂实习</div>
+                    <div class="timeline-desc">复旦大学软件工程实验室，研究方向为前端架构与微前端。在字节跳动担任前端开发实习生，参与抖音商家平台重构。同年以第一作者身份发表一篇EI会议论文，并开发了开源组件库 "Shiro UI" 。</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">2022 - 2024</div>
+                    <div class="timeline-title">🚀 职业起步 · 全栈工程师</div>
+                    <div class="timeline-desc">毕业后加入上海某独角兽科技公司，负责低代码平台核心模块设计与开发，推动团队前端工程化升级。主导从0到1搭建B端设计系统，获得年度创新奖。期间利用周末时间完成线上课程《现代前端架构实战》销量突破2000份。</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">2024 - 至今</div>
+                    <div class="timeline-title">🌟 独立创作与技术布道</div>
+                    <div class="timeline-desc">晋升为前端架构师，同时启动个人创作者计划——运营技术社群、制作开源教程，并开始跨界参与艺术科技项目。参与过两场线下黑客松并获奖，在业余时间开发了一款AI绘画辅助工具。持续探索技术与人文的交汇点。</div>
+                </div>
+            </div>
+            <div style="margin-top: 1.2rem; background: #eff6ff; border-radius: 1rem; padding: 0.8rem 1rem; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <i class="fas fa-rocket" style="color:#3b82f6"></i>
+                <span style="font-size: 0.85rem; font-weight: 500;">未来展望：继续深耕前端生态，同时探索AR/VR交互以及独立游戏领域，希望用技术带来更多有温度的产品。</span>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <i class="far fa-copyright"></i> 2025 林一舟 · 保持好奇，保持热爱  |  设计灵感源自日常点滴
+    </footer>
+</div>
+
+<!-- 移动端菜单 JS -->
+<script th:src="@{/js/introduction.js}"></script>
+</body>
+</html>

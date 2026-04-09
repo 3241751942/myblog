@@ -1,5 +1,6 @@
 package com.zzl.myblog.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
@@ -9,7 +10,7 @@ import lombok.Data;
 @Data
 public class TechDTO {
 
-
+    @NotBlank(message="技术标签名称不能为空")
     private String name;//名称
 
     private String category;//类型

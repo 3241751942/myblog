@@ -9,6 +9,8 @@ import com.zzl.myblog.service.ProjectService;
 import com.zzl.myblog.service.ProjectTechService;
 import com.zzl.myblog.service.TechService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -125,7 +127,7 @@ public class ProjectController {
      * GET /api/projects/tech/{techName}
      */
     @GetMapping("/tech/{techName}")
-    public ResponseEntity<List<ProjectResponseDTO>> getProjectsByTechName(@PathVariable String techName) {
+    public ResponseEntity<List<ProjectResponseDTO>> getProjectsByTechName(@PathVariable @NotBlank(message = "名字不能为空") String techName) {
         List<Project> projects = projectService.getProjectsByTechName(techName);
         List<ProjectResponseDTO> responseDTOs = projects.stream()
                 .map(ProjectResponseDTO::fromEntity)
@@ -179,7 +181,7 @@ public class ProjectController {
      * PUT /api/projects/{id}
      */
     @PutMapping("/{id}")
-    public ResponseEntity<ProjectResponseDTO> updateProject(@PathVariable Long id,
+    public ResponseEntity<ProjectResponseDTO> updateProject(@PathVariable @NotNull Long id,
                                                             @Valid @RequestBody ProjectDTO projectDTO) {
         // 1. 检查项目是否存在
         Optional<Project> existingOpt = projectService.getProjectById(id);
@@ -214,7 +216,7 @@ public class ProjectController {
      * DELETE /api/projects/{id}
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteProject(@PathVariable @NotNull(message = "项目id不能为空") Long id) {
         Optional<Project> existingOpt = projectService.getProjectById(id);
         if (existingOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -229,7 +231,7 @@ public class ProjectController {
      * POST /api/projects/{projectId}/techs
      */
     @PostMapping("/{projectId}/techs")
-    public ResponseEntity<Void> addTechsToProject(@PathVariable Long projectId,
+    public ResponseEntity<Void> addTechsToProject(@PathVariable @NotNull(message="项目id不能为空") Long projectId,
                                                   @RequestBody List<String> techNames) {
         Optional<Project> existingOpt = projectService.getProjectById(projectId);
         if (existingOpt.isEmpty()) {

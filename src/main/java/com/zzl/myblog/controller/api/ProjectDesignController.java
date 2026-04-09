@@ -4,8 +4,11 @@ import com.zzl.myblog.dto.ProjectDesignDTO;
 import com.zzl.myblog.dto.ProjectDesignResponseDTO;
 import com.zzl.myblog.entity.ProjectDesign;
 import com.zzl.myblog.service.ProjectDesignService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +17,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/projects/design")
 @RequiredArgsConstructor
+@Validated
 public class ProjectDesignController {
 
     private final ProjectDesignService projectDesignService;
@@ -23,7 +27,7 @@ public class ProjectDesignController {
      */
     @GetMapping("/{projectId}")
     public ResponseEntity<List<ProjectDesignResponseDTO>> getByProjectId(
-            @PathVariable Long projectId
+            @NotNull(message = "项目不能为空") @PathVariable Long projectId
     ) {
         List<ProjectDesign> list = projectDesignService.getByProjectId(projectId);
         List<ProjectDesignResponseDTO> result = list.stream()
@@ -36,7 +40,7 @@ public class ProjectDesignController {
      * 单条 添加设计思路
      */
     @PostMapping
-    public ResponseEntity<Void> add(@RequestBody ProjectDesignDTO dto) {
+    public ResponseEntity<Void> add(@Valid @RequestBody ProjectDesignDTO dto) {
         ProjectDesign design = new ProjectDesign();
         design.setId(dto.getId());
         design.setProjectId(dto.getProjectId());
@@ -52,7 +56,7 @@ public class ProjectDesignController {
      * 删除单条设计思路（根据 id）
      */
     @DeleteMapping("/item/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteById(@NotNull(message = "设计思路id不能为空") @PathVariable Long id) {
         projectDesignService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
@@ -61,7 +65,7 @@ public class ProjectDesignController {
      * 删除某个项目的 全部设计思路
      */
     @DeleteMapping("/project/{projectId}")
-    public ResponseEntity<Void> deleteByProjectId(@PathVariable Long projectId) {
+    public ResponseEntity<Void> deleteByProjectId(@NotNull(message = "项目id不能为空") @PathVariable Long projectId) {
         projectDesignService.deleteByProjectId(projectId);
         return ResponseEntity.noContent().build();
     }
@@ -72,7 +76,7 @@ public class ProjectDesignController {
      */
     @PutMapping("/{projectId}")
     public ResponseEntity<Void> updateProjectDesign(
-            @PathVariable Long projectId,
+            @PathVariable @NotNull(message="项目id不能空") Long projectId,
             @RequestBody List<ProjectDesignDTO> dtoList
     ) {
         List<ProjectDesign> designList = dtoList.stream().map(dto -> {

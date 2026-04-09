@@ -1,7 +1,6 @@
 const API = "/api/projects";
 
 async function loadProjectDetail() {
-    // 1. 从 URL ?id= 正确获取项目ID
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
 
@@ -14,16 +13,11 @@ async function loadProjectDetail() {
     }
 
     try {
-        // ==========================
-        // 1. 加载项目信息（正确）
-        // ==========================
         const res = await fetch(`${API}/${id}`);
         const project = await res.json();
         title.innerText = project.title;
 
-        // ==========================
-        // 2. 加载技术栈（你后端是 /techs）
-        // ==========================
+        // 技术栈
         let techTags = '<span class="tech">加载中...</span>';
         try {
             const techRes = await fetch(`${API}/${id}/techs`);
@@ -35,14 +29,11 @@ async function loadProjectDetail() {
             techTags = '<span class="tech">加载失败</span>';
         }
 
-        // ==========================
-        // 3. 加载设计思路（你的接口）
-        // ==========================
+        // 设计思路
         let designHtml = "<p>加载中...</p>";
         try {
             const designRes = await fetch(`${API}/design/${id}`);
             const designList = await designRes.json();
-
             if (designList?.length) {
                 designHtml = "";
                 designList.forEach(item => {
@@ -55,9 +46,34 @@ async function loadProjectDetail() {
             designHtml = "<p>暂无设计思路</p>";
         }
 
-        // ==========================
+        // ===================== ✅ 最终版 在线演示（截图+按钮，最好看最稳定）=====================
+        const demoSection = `
+        <div class="section" id="demo">
+            <h2><i class="fas fa-desktop"></i> 项目演示</h2>
+            <p>点击下方按钮查看项目演示与源代码</p>
+
+            <!-- 项目截图预览（美观、专业、永不报错） -->
+            <div style="margin:1.2rem 0; border-radius:10px; overflow:hidden; border:1px solid var(--border-color);">
+                <img 
+                    src="${project.imageUrl || 'https://picsum.photos/1200/600?random='+id}" 
+                    alt="项目截图" 
+                    style="width:100%; height:auto; display:block;">
+            </div>
+
+            <!-- 演示按钮 -->
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:0.5rem;">
+                <a href="${project.demoUrl || 'javascript:void(0)'}" target="_blank" class="btn" 
+                   style="${!project.demoUrl ? 'background:#ccc;cursor:not-allowed;' : ''}">
+                    <i class="fas fa-external-link-alt"></i> 在线演示
+                </a>
+                <a href="${project.githubUrl || 'javascript:void(0)'}" target="_blank" class="btn" 
+                   style="background:#333; ${!project.githubUrl ? 'opacity:0.6;cursor:not-allowed;' : ''}">
+                    <i class="fab fa-github"></i> 查看源码
+                </a>
+            </div>
+        </div>`;
+
         // 渲染页面
-        // ==========================
         container.innerHTML = `
             <div class="section active" id="intro">
                 <h2><i class="fas fa-info-circle"></i> 项目介绍</h2>
@@ -74,11 +90,7 @@ async function loadProjectDetail() {
                 <div class="tech-list">${techTags}</div>
             </div>
 
-            <div class="section" id="demo">
-                <h2><i class="fas fa-desktop"></i> 在线演示</h2>
-                <a href="${project.demoUrl || '#'}" target="_blank" class="btn">打开演示</a>
-                <a href="${project.githubUrl || '#'}" target="_blank" class="btn" style="margin-left:8px; background:#333;">GitHub</a>
-            </div>
+            ${demoSection}
         `;
 
         initNavSwitch();
@@ -89,7 +101,6 @@ async function loadProjectDetail() {
     }
 }
 
-// 导航切换（你原来的逻辑，完全不变）
 function initNavSwitch() {
     document.querySelectorAll(".nav-item").forEach(item => {
         item.addEventListener("click", () => {

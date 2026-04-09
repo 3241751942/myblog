@@ -224,11 +224,11 @@
             <a href="/index.html"><i class="fas fa-code"></i> 林间博客</a>
         </div>
         <ul class="nav-links">
-            <li><a href="/index.html">首页</a></li>
+            <li><a th:href="@{/public/index}">首页</a></li>
             <li><a href="/tech-articles.html">技术文章</a></li>
             <li><a href="/dev-categories.html">开发分类</a></li>
-            <li><a href="/public/practical.html">实战案例</a></li>
-            <li><a href="/about.html">关于我</a></li>
+            <li><a th:href="@{/public/practical}">实战案例</a></li>
+            <li><a th:href="@{/public/introduction}">关于我</a></li>
         </ul>
     </div>
 </nav>
@@ -262,6 +262,6 @@
     </div>
 </div>
 
-<script src="/js/projectDetail.js"></script>
+<script th:src="@{/js/projectDetail.js}"></script>
 </body>
 </html>

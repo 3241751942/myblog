@@ -21,11 +21,11 @@
             <i class="fas fa-bars"></i>
         </button>
         <ul class="nav-links" id="navLinks">
-            <li><a href="index.html" data-nav="home">首页</a></li>
-            <li><a href="tech-articles.html" data-nav="tech">技术文章</a></li>
-            <li><a href="dev-categories.html" data-nav="dev">开发分类</a></li>
-            <li><a href="practial.html" class="active" data-nav="case">实战案例</a></li>
-            <li><a href="about.html" data-nav="about">关于我</a></li>
+            <li><a th:href="@{/public/index}" data-nav="home">首页</a></li>
+            <li><a th:href="@{/public/tech-articles.html}" data-nav="tech">技术文章</a></li>
+            <li><a th:href="@{/public/dev-categories.html}" data-nav="dev">开发分类</a></li>
+            <li><a th:href="@{/public/practical}" class="active" data-nav="case">实战案例</a></li>
+            <li><a th:href="@{/public/introduction}" data-nav="about">关于我</a></li>
         </ul>
     </div>
 </nav>

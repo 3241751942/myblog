@@ -5,9 +5,13 @@ import com.zzl.myblog.dto.TechResponseDTO;
 import com.zzl.myblog.entity.Tech;
 import com.zzl.myblog.service.TechService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +21,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/techs")
 @RequiredArgsConstructor
+@Validated
 public class TechController {
 
     private final TechService techService;
@@ -39,7 +44,7 @@ public class TechController {
      * GET /api/techs/{id}
      */
     @GetMapping("/{id}")
-    public ResponseEntity<TechResponseDTO> getTechById(@PathVariable Long id) {
+    public ResponseEntity<TechResponseDTO> getTechById(@PathVariable @NotNull(message="标签id不能为空") Long id) {
         Optional<Tech> techOpt = techService.getTechById(id);
         if (techOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -52,7 +57,7 @@ public class TechController {
      * GET /api/techs/project/{projectId}
      */
     @GetMapping("/project/{projectId}")
-    public ResponseEntity<List<TechResponseDTO>> getAllTechsByProjectId(@PathVariable Long projectId) {
+    public ResponseEntity<List<TechResponseDTO>> getAllTechsByProjectId(@PathVariable @NotNull(message = "项目id不能为空") Long projectId) {
         List<Tech> techs = techService.getTechsByProjectId(projectId);
         List<TechResponseDTO> responseDTOs = techs.stream()
                 .map(TechResponseDTO::fromEntity)
@@ -65,7 +70,7 @@ public class TechController {
      * GET /api/techs/category/{category}
      */
     @GetMapping("/category/{category}")
-    public ResponseEntity<List<TechResponseDTO>> getTechsByCategory(@PathVariable String category) {
+    public ResponseEntity<List<TechResponseDTO>> getTechsByCategory(@PathVariable @NotBlank(message = "标签类型不能为空") String category) {
         List<Tech> techs = techService.getTechsByCategory(category);
         List<TechResponseDTO> responseDTOs = techs.stream()
                 .map(TechResponseDTO::fromEntity)
@@ -79,7 +84,7 @@ public class TechController {
      * GET /api/techs/name/{name}
      */
     @GetMapping("/name/{name}")
-    public ResponseEntity<TechResponseDTO> getTechByName(@PathVariable String name) {
+    public ResponseEntity<TechResponseDTO> getTechByName(@PathVariable @NotBlank(message = "标签名称不能为空") String name) {
         Optional<Tech> techOpt = techService.getTechByName(name);
         if (techOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -110,7 +115,7 @@ public class TechController {
      * POST /api/techs/batch
      */
     @PostMapping("/batch")
-    public ResponseEntity<List<TechResponseDTO>> createTechsIfNotExist(@RequestBody List<String> techNames) {
+    public ResponseEntity<List<TechResponseDTO>> createTechsIfNotExist(@RequestBody  @NotEmpty(message = "技术名称列表不能为空") List<@NotBlank(message = "技术名称不能为空") String> techNames) {
         List<Tech> techs = techService.createTechsIfNotExist(techNames);
         List<TechResponseDTO> responseDTOs = techs.stream()
                 .map(TechResponseDTO::fromEntity)

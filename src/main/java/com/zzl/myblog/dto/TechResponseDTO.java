@@ -1,6 +1,8 @@
 package com.zzl.myblog.dto;
 
 import com.zzl.myblog.entity.Tech;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,8 +15,11 @@ import java.util.stream.Collectors;
 @Data
 public class TechResponseDTO {
 
+    @NotNull(message = "技术标签id不能为空")
     private Long id;
+    @NotBlank(message="技术标签名称不能为空")
     private String name;
+
     private String category;
     private String icon;
     private LocalDateTime createdAt;
