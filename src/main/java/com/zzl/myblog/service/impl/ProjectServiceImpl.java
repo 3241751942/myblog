@@ -3,10 +3,11 @@ package com.zzl.myblog.service.impl;
 import com.zzl.myblog.entity.Project;
 import com.zzl.myblog.entity.Tech;
 import com.zzl.myblog.mapper.ProjectMapper;
-import com.zzl.myblog.mapper.ProjectTechMapper;
 import com.zzl.myblog.service.ProjectService;
 import com.zzl.myblog.service.TechService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -15,6 +16,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 
 @Service
@@ -24,6 +26,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectMapper projectMapper;
     private final TechService techService;
+    private final RedisTemplate<Object, Object> redisTemplate;
 
     @Override
     @Transactional
@@ -56,6 +59,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    @Transactional
     public void deleteProject(Long id) {
         if(id == null){
             throw new IllegalArgumentException("项目id不能为空");
@@ -64,6 +68,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    @Transactional
     public Optional<Project> getProjectById(Long id) {
         if(id == null){
             return Optional.empty();
@@ -120,7 +125,27 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<Project> getAllProjectsWithTechs() {
-        return projectMapper.findAllWithTechs();
+        String cacheKey = "projects:all:withTechs";
+        //从 Redis 取缓存
+        try {
+            List<Project> projects = (List<Project>) redisTemplate.opsForValue().get(cacheKey);
+            if (projects != null) {
+                return projects;
+            }
+        } catch (Exception e) {
+            // Redis 连接失败/异常：执行缓存降级
+            System.err.println("Redis 缓存获取失败，直接查询数据库：" + e.getMessage());
+        }
+        // 缓存不存在 或 Redis 异常，直接查数据库
+        List<Project> projects = projectMapper.findAllWithTechs();
+        // 尝试存入缓存（失败也不影响返回结果）
+        try {
+            redisTemplate.opsForValue().set(cacheKey, projects, 10, TimeUnit.MINUTES);
+        } catch (Exception e) {
+            System.err.println("Redis 缓存写入失败：" + e.getMessage());
+        }
+
+        return projects;
     }
 
     @Override

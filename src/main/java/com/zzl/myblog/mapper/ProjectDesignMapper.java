@@ -11,6 +11,8 @@ public interface ProjectDesignMapper {
 
     int deleteById(Long id);
 
-    //删除该项目的全部设计思路
+    /**
+     * 删除该项目的全部设计思路
+     */
     int deleteByProjectId(Long projectId);
 }

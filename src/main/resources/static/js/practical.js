@@ -23,7 +23,10 @@ async function fetchProjects() {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const data = await response.json();
+
+        // 适配 ApiResponseDTO
+        const result = await response.json();
+        const data = result.data;
 
         // 转换后端数据格式为前端需要的格式
         allProjects = data.map(project => ({
@@ -38,7 +41,7 @@ async function fetchProjects() {
             date: project.date ? project.date.substring(0, 7) : ''
         }));
 
-        console.log('加载到的项目数量:', allProjects.length);  // 调试用
+        console.log('加载到的项目数量:', allProjects.length);
         renderProjects();
     } catch (error) {
         console.error('获取项目数据失败:', error);
@@ -53,12 +56,10 @@ async function fetchProjects() {
     }
 }
 
-// 渲染项目卡片（修改为使用 allProjects，并添加点击跳转）
+// 渲染项目卡片
 function renderProjects() {
     let filtered = allProjects.filter(project => {
-        // 分类筛选
         const categoryMatch = currentCategory === 'all' || project.category === currentCategory;
-        // 搜索筛选
         const searchMatch = currentSearch === '' ||
             project.title.toLowerCase().includes(currentSearch.toLowerCase()) ||
             project.description.toLowerCase().includes(currentSearch.toLowerCase()) ||
@@ -70,7 +71,7 @@ function renderProjects() {
         projectsContainer.innerHTML = `
             <div class="no-results" style="grid-column: 1/-1;">
                 <i class="fas fa-search" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 1rem; display: block;"></i>
-                <h3 style="margin-bottom: 0.5rem;">未找到相关项目</h3>
+                <h3>未找到相关项目</h3>
                 <p style="color: #64748b;">尝试调整筛选条件或搜索关键词</p>
             </div>
         `;
@@ -91,6 +92,7 @@ function renderProjects() {
             </div>
             <div class="project-content">
                 <h3 class="project-title">${escapeHtml(project.title)}</h3>
+                <!-- ✅ 修复这里：project.description -->
                 <p class="project-desc">${escapeHtml(project.description)}</p>
                 <div class="tech-stack">
                     ${project.tech.map(tech => `<span class="tech-badge">${escapeHtml(tech)}</span>`).join('')}
@@ -114,7 +116,6 @@ function renderProjects() {
 
     projectsContainer.innerHTML = projectsHTML;
 
-    // 绑定卡片点击事件
     document.querySelectorAll('.project-card').forEach(card => {
         card.addEventListener('click', () => {
             const projectId = card.getAttribute('data-id');
@@ -205,7 +206,7 @@ function init() {
     bindSearchEvent();
     initMobileMenu();
     setActiveNav();
-    fetchProjects();  // ✅ 从后端获取数据，而不是直接渲染
+    fetchProjects();
 }
 
 init();

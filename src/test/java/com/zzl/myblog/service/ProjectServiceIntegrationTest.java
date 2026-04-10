@@ -76,6 +76,9 @@ public class ProjectServiceIntegrationTest {
     void testGetAll() {
         projectService.createProject(testProject);
         List<Project> list = projectService.getAllProjects();
+        for(Project project : list){
+            System.out.println(project);
+        }
         Assertions.assertFalse(list.isEmpty());
     }
 

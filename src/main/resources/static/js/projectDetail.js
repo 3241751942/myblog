@@ -14,14 +14,17 @@ async function loadProjectDetail() {
 
     try {
         const res = await fetch(`${API}/${id}`);
-        const project = await res.json();
+        const result = await res.json();
+        const project = result.data; // <-- 这里修复
+
         title.innerText = project.title;
 
-        // 技术栈
         let techTags = '<span class="tech">加载中...</span>';
         try {
             const techRes = await fetch(`${API}/${id}/techs`);
-            const techList = await techRes.json();
+            const techResult = await techRes.json();
+            const techList = techResult.data; // <-- 这里修复
+
             techTags = techList?.length
                 ? techList.map(t => `<span class="tech">${t.name}</span>`).join('')
                 : '<span class="tech">暂无技术</span>';
@@ -29,11 +32,12 @@ async function loadProjectDetail() {
             techTags = '<span class="tech">加载失败</span>';
         }
 
-        // 设计思路
         let designHtml = "<p>加载中...</p>";
         try {
             const designRes = await fetch(`${API}/design/${id}`);
-            const designList = await designRes.json();
+            const designResult = await designRes.json();
+            const designList = designResult.data; // <-- 这里修复
+
             if (designList?.length) {
                 designHtml = "";
                 designList.forEach(item => {
@@ -46,13 +50,12 @@ async function loadProjectDetail() {
             designHtml = "<p>暂无设计思路</p>";
         }
 
-        // ===================== ✅ 最终版 在线演示（截图+按钮，最好看最稳定）=====================
+        // 在线演示
         const demoSection = `
         <div class="section" id="demo">
             <h2><i class="fas fa-desktop"></i> 项目演示</h2>
             <p>点击下方按钮查看项目演示与源代码</p>
 
-            <!-- 项目截图预览（美观、专业、永不报错） -->
             <div style="margin:1.2rem 0; border-radius:10px; overflow:hidden; border:1px solid var(--border-color);">
                 <img 
                     src="${project.imageUrl || 'https://picsum.photos/1200/600?random='+id}" 
@@ -60,7 +63,6 @@ async function loadProjectDetail() {
                     style="width:100%; height:auto; display:block;">
             </div>
 
-            <!-- 演示按钮 -->
             <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:0.5rem;">
                 <a href="${project.demoUrl || 'javascript:void(0)'}" target="_blank" class="btn" 
                    style="${!project.demoUrl ? 'background:#ccc;cursor:not-allowed;' : ''}">
