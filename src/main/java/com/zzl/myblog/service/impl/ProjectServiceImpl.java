@@ -6,7 +6,6 @@ import com.zzl.myblog.mapper.ProjectMapper;
 import com.zzl.myblog.service.ProjectService;
 import com.zzl.myblog.service.TechService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +25,8 @@ public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectMapper projectMapper;
     private final TechService techService;
-    private final RedisTemplate<Object, Object> redisTemplate;
+
+    private final RedisTemplate<String, Object> redisTemplate;
 
     @Override
     @Transactional
@@ -130,6 +130,7 @@ public class ProjectServiceImpl implements ProjectService {
         try {
             List<Project> projects = (List<Project>) redisTemplate.opsForValue().get(cacheKey);
             if (projects != null) {
+                System.err.println("Redis 缓存获取成功");
                 return projects;
             }
         } catch (Exception e) {
