@@ -11,6 +11,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.stream.Collectors;
 
@@ -78,6 +79,17 @@ public class GlobalExceptionHandler {
     public Result handleDataIntegrityViolation(DataIntegrityViolationException e) {
         log.warn("数据约束冲突: {}", e.getMessage());
         return Result.error(409, "数据重复或违反约束");
+    }
+
+
+    /**
+     * 处理 favicon.ico 不存在
+     */
+    @ExceptionHandler(NoResourceFoundException.class)
+    public Result<Void> handleNoResource(NoResourceFoundException e) {
+        log.warn("数据未找到: {}", e.getMessage());
+        // 只返回 404，不打印错误日志
+        return Result.error(404,"");
     }
 
     // 9. 处理所有未捕获的异常（兜底）

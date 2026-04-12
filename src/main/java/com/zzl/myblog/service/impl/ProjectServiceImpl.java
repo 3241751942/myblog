@@ -31,6 +31,9 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     @Transactional
     public Project createProject(Project project) {
+
+        //删除缓存
+        redisTemplate.delete("projects:all:withTechs");
         if(project==null){
             throw new IllegalArgumentException("项目信息不能为空");
         }
@@ -47,6 +50,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     @Transactional
     public Project updateProject(Project project) {
+        redisTemplate.delete("projects:all:withTechs");
         if(project==null||project.getId()==null){
             throw new IllegalArgumentException("项目信息和id不能为空");
         }
@@ -61,6 +65,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     @Transactional
     public void deleteProject(Long id) {
+        redisTemplate.delete("projects:all:withTechs");
         if(id == null){
             throw new IllegalArgumentException("项目id不能为空");
         }

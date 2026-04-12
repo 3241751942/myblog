@@ -11,7 +11,7 @@
         ORDER BY sort ASC
     </select>
 
-    <insert id="insert">
+    <insert id="insertDesign">
         INSERT INTO project_design(project_id, title, content, sort)
         VALUES(#{projectId}, #{title}, #{content}, #{sort})
     </insert>

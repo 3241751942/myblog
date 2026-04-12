@@ -1,1 +1,480 @@
-hello
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>项目管理 - 博客后台</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            background: #f5f7fa;
+            padding: 30px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .header h2 {
+            font-size: 22px;
+            color: #333;
+        }
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-primary {
+            background: #2563eb;
+            color: #fff;
+        }
+        .btn-warning {
+            background: #f59e0b;
+            color: #fff;
+        }
+        .btn-danger {
+            background: #ef4444;
+            color: #fff;
+        }
+        .btn-sm {
+            padding: 4px 8px;
+            font-size: 12px;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background: #f9fafb;
+            color: #666;
+        }
+        .flex {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .mask {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+        .modal {
+            background: white;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 10px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-body {
+            padding: 20px;
+        }
+        .close {
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .form-item {
+            margin-bottom: 16px;
+        }
+        .form-item label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+        .form-item input,
+        .form-item textarea,
+        .form-item select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .form-item textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        .section {
+            margin: 26px 0 12px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #2563eb;
+        }
+        .tag-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .tag {
+            padding: 6px 10px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .tag.selected {
+            background: #2563eb;
+            color: white;
+        }
+        .design-item {
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .design-item input {
+            flex: 1;
+        }
+        .design-item textarea {
+            flex: 2;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h2>📦 项目实战管理</h2>
+        <button class="btn btn-primary" onclick="openAddModal()"><i class="fas fa-plus"></i> 新增项目</button>
+    </div>
+
+    <div class="card">
+        <div id="projectList">加载中...</div>
+    </div>
+</div>
+
+<!-- 弹窗 -->
+<div class="mask" id="modalMask">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 id="modalTitle">新增项目</h3>
+            <span class="close" onclick="closeModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form id="projectForm">
+                <input type="hidden" id="projectId">
+
+                <!-- 基本信息 -->
+                <div class="form-item">
+                    <label>项目标题 *</label>
+                    <input id="title" required>
+                </div>
+                <div class="form-item">
+                    <label>项目描述</label>
+                    <textarea id="description"></textarea>
+                </div>
+                <div class="form-item">
+                    <label>分类</label>
+                    <input id="category" placeholder="JavaWeb / 中间件 / 前端">
+                </div>
+                <div class="form-item">
+                    <label>封面 URL</label>
+                    <input id="imageUrl">
+                </div>
+                <div class="form-item">
+                    <label>演示 URL</label>
+                    <input id="demoUrl">
+                </div>
+                <div class="form-item">
+                    <label>Github URL</label>
+                    <input id="githubUrl">
+                </div>
+                <div class="form-item">
+                    <label>发布日期</label>
+                    <input type="date" id="date">
+                </div>
+
+                <!-- 技术标签：支持选择 + 自定义 -->
+                <div class="section">技术标签</div>
+                <div class="form-item">
+                    <label>选择已有标签</label>
+                    <div id="techTags" class="tag-group">加载中...</div>
+                </div>
+                <div class="form-item">
+                    <label>自定义标签（多个用逗号分隔）</label>
+                    <input type="text" id="customTechInput" placeholder="例如：Vue,Redis,MySQL">
+                </div>
+
+                <!-- 项目设计思路 -->
+                <div class="section">项目设计思路</div>
+                <div id="designList">
+                    <div class="flex" style="margin-bottom:10px">
+                        <button type="button" class="btn btn-sm btn-primary" onclick="addDesignItem()">+ 添加思路</button>
+                    </div>
+                </div>
+
+                <div style="text-align:right; margin-top:20px">
+                    <button type="button" class="btn" onclick="closeModal()">取消</button>
+                    <button type="submit" class="btn btn-primary" style="margin-left:10px">保存项目</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    let selectedTechs = [];
+    let allTechs = [];
+    let designList = [];
+    let designSort = 1;
+
+    // 加载项目列表
+    function loadProjectList() {
+        fetch("/api/projects")
+            .then(res => res.json())
+            .then(data => {
+                const list = data.data;
+                let html = `<table>
+                    <tr><th>ID</th><th>项目名</th><th>分类</th><th>日期</th><th>操作</th></tr>`;
+                list.forEach(item => {
+                    html += `<tr>
+                        <td>${item.id}</td>
+                        <td>${item.title}</td>
+                        <td>${item.category||'-'}</td>
+                        <td>${item.date||'-'}</td>
+                        <td>
+                            <div class="flex">
+                                <button class="btn btn-warning" onclick="openEditModal(${item.id})">编辑</button>
+                                <button class="btn btn-danger" onclick="deleteProject(${item.id})">删除</button>
+                            </div>
+                        </td>
+                    </tr>`;
+                });
+                html += `</table>`;
+                document.getElementById("projectList").innerHTML = html;
+            });
+    }
+
+    // 加载所有技术标签
+    function loadAllTechs() {
+        fetch("/api/techs")
+            .then(res => res.json())
+            .then(data => {
+                allTechs = data.data || [];
+                renderTechTags();
+            });
+    }
+
+    // 渲染标签
+    function renderTechTags() {
+        const dom = document.getElementById("techTags");
+        let html = '';
+        allTechs.forEach(t => {
+            const sel = selectedTechs.includes(t.name) ? 'selected' : '';
+            html += `<span class="tag ${sel}" onclick="toggleTech('${t.name}')">${t.name}</span>`;
+        });
+        dom.innerHTML = html;
+    }
+
+    // 切换标签
+    function toggleTech(name) {
+        if (selectedTechs.includes(name)) {
+            selectedTechs = selectedTechs.filter(s => s !== name);
+        } else {
+            selectedTechs.push(name);
+        }
+        renderTechTags();
+    }
+
+    // 设计思路相关
+    function addDesignItem(design = null) {
+        const id = design?.id || '';
+        const title = design?.title || '';
+        const content = design?.content || '';
+        const sort = design?.sort || designSort++;
+
+        const item = `
+        <div class="design-item" data-sort="${sort}" data-id="${id}">
+            <input placeholder="标题" value="${title}" class="d-title">
+            <textarea placeholder="内容" class="d-content">${content}</textarea>
+            <button type="button" class="btn btn-sm btn-danger" onclick="removeDesignItem(this)">删除</button>
+        </div>`;
+        document.getElementById("designList").insertAdjacentHTML('beforeend', item);
+    }
+
+    function removeDesignItem(el) {
+        el.parentElement.remove();
+    }
+
+    // 收集设计思路
+    function collectDesigns() {
+        const list = [];
+        document.querySelectorAll(".design-item").forEach(item => {
+            list.push({
+                id: item.dataset.id || null,
+                projectId: document.getElementById("projectId").value,
+                title: item.querySelector(".d-title").value,
+                content: item.querySelector(".d-content").value,
+                sort: parseInt(item.dataset.sort) || 0
+            });
+        });
+        return list;
+    }
+
+    // 打开新增
+    function openAddModal() {
+        document.getElementById("modalTitle").innerText = "新增项目";
+        document.getElementById("projectForm").reset();
+        document.getElementById("projectId").value = "";
+        selectedTechs = [];
+        designList = [];
+        designSort = 1;
+        document.getElementById("designList").innerHTML = `
+            <div class="flex" style="margin-bottom:10px">
+                <button type="button" class="btn btn-sm btn-primary" onclick="addDesignItem()">+ 添加思路</button>
+            </div>`;
+        document.getElementById("customTechInput").value = "";
+        renderTechTags();
+        document.getElementById("modalMask").style.display = "flex";
+    }
+
+    // 打开编辑
+    function openEditModal(id) {
+        fetch(`/api/projects/${id}`).then(res => res.json()).then(data => {
+            const p = data.data;
+            document.getElementById("modalTitle").innerText = "编辑项目";
+            document.getElementById("projectId").value = p.id;
+            document.getElementById("title").value = p.title || '';
+            document.getElementById("description").value = p.description || '';
+            document.getElementById("category").value = p.category || '';
+            document.getElementById("imageUrl").value = p.imageUrl || '';
+            document.getElementById("demoUrl").value = p.demoUrl || '';
+            document.getElementById("githubUrl").value = p.githubUrl || '';
+            document.getElementById("date").value = p.date ? p.date.split('T')[0] : '';
+
+            // 标签
+            selectedTechs = p.techs ? p.techs.map(t => t.name) : [];
+            renderTechTags();
+
+            // 加载设计思路
+            fetch(`/api/projects/design/${p.id}`).then(res => res.json()).then(d => {
+                const designs = d.data || [];
+                document.getElementById("designList").innerHTML = `
+                    <div class="flex" style="margin-bottom:10px">
+                        <button type="button" class="btn btn-sm btn-primary" onclick="addDesignItem()">+ 添加思路</button>
+                    </div>`;
+                designs.forEach(des => addDesignItem(des));
+            });
+
+            document.getElementById("modalMask").style.display = "flex";
+        });
+    }
+
+    function closeModal() {
+        document.getElementById("modalMask").style.display = "none";
+    }
+
+    // 提交保存
+    document.getElementById("projectForm").addEventListener("submit", e => {
+        e.preventDefault();
+        const id = document.getElementById("projectId").value;
+
+        // 合并标签：选中 + 自定义
+        const customInput = document.getElementById("customTechInput").value.trim();
+        const customTechs = customInput ? customInput.split(',').map(s => s.trim()).filter(Boolean) : [];
+        const finalTechs = [...new Set([...selectedTechs, ...customTechs])];
+
+        const params = {
+            title: document.getElementById("title").value,
+            description: document.getElementById("description").value,
+            category: document.getElementById("category").value,
+            imageUrl: document.getElementById("imageUrl").value,
+            demoUrl: document.getElementById("demoUrl").value,
+            githubUrl: document.getElementById("githubUrl").value,
+            date: document.getElementById("date").value,
+            techs: finalTechs
+        };
+
+        const designs = collectDesigns();
+
+        // 保存项目
+        const savePromise = id
+            ? fetch(`/api/projects/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(params)
+            })
+            : fetch('/api/projects', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(params)
+            });
+
+        savePromise
+            .then(res => res.json())
+            .then(res => {
+                const projectId = res.data.id;
+                // 保存设计思路
+                if (designs.length > 0) {
+                    return fetch(`/api/projects/design/${projectId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(designs)
+                    });
+                }
+                return Promise.resolve();
+            })
+            .then(() => {
+                closeModal();
+                loadProjectList();
+            });
+    });
+
+    // 删除项目
+    function deleteProject(id) {
+        if (!confirm("确定删除？")) return;
+        fetch(`/api/projects/${id}`, { method: 'DELETE' })
+            .then(() => loadProjectList());
+    }
+
+    window.onload = () => {
+        loadProjectList();
+        loadAllTechs();
+    };
+</script>
+</body>
+</html>
